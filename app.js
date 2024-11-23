@@ -18,6 +18,11 @@ app.use(express.json()); // Parse JSON requests
 
 
 // Routes
+
+app.get('/', (req, res) => {
+  res.send('Service is running');
+});
+
 const authRoutes = require('./routes/auth');
 app.use('/api/auth', authRoutes);
 
