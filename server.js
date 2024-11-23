@@ -21,7 +21,14 @@ app.use(express.urlencoded({ extended: true }));
 
 // Enable CORS
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  origin: (origin, callback) => {
+      // Allow requests from any localhost origin
+      if (origin?.startsWith('http://localhost')) {
+          callback(null, true);
+      } else {
+          callback(new Error('Not allowed by CORS'));
+      }
+  },
   credentials: true
 }));
 
@@ -34,6 +41,7 @@ app.use('/api', limiter);
 // Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/users', require('./routes/user'));
+app.use('/api/stations', require('./routes/station'));
 
 // Error handling middleware
 app.use(errorHandler);
