@@ -64,3 +64,6 @@ junit-report.xml
 
 # Docker files
 docker-compose.override.yml
+
+# test files
+*.py
