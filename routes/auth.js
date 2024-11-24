@@ -3,6 +3,10 @@ const { body, validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const router = express.Router();
+const { limiter } = require('../config/rateLimiter');
+const { sendEmail } = require('../utils/emailService');
+const { getResetPasswordTemplate } = require('../utils/emailTemplates');
+const crypto = require('crypto');
 
 // Validation middleware
 const registerValidation = [
@@ -138,6 +142,108 @@ router.post('/login', loginValidation, async (req, res) => {
       message: 'Server error during login' 
     });
   }
+});
+
+// Forgot Password
+router.post('/forgot-password', async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'No user found with that email'
+      });
+    }
+
+    // Generate reset token
+    const resetToken = user.generateResetToken();
+    await user.save();
+
+    // Create reset url - Using FRONTEND_URL for the web interface
+    const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
+    
+    // Send email
+    const emailSent = await sendEmail(
+      user.email,
+      'Reset Your Pravaah Password',
+      getResetPasswordTemplate(resetUrl)
+    );
+
+    if (!emailSent) {
+      user.resetPasswordToken = undefined;
+      user.resetPasswordExpire = undefined;
+      await user.save();
+
+      return res.status(500).json({
+        success: false,
+        message: 'Email could not be sent'
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Password reset email sent'
+    });
+
+  } catch (err) {
+    console.error('Password reset error:', err);
+    res.status(500).json({
+      success: false,
+      message: 'Server error during password reset request'
+    });
+  }
+});
+
+// Reset Password
+router.post('/reset-password/:resetToken',
+  limiter,
+  [
+    body('password')
+      .isLength({ min: 6 })
+      .withMessage('Password must be 6 or more characters')
+      .matches(/\d/)
+      .withMessage('Password must contain a number')
+  ],
+  async (req, res) => {
+    try {
+      // Get hashed token
+      const resetPasswordToken = crypto
+        .createHash('sha256')
+        .update(req.params.resetToken)
+        .digest('hex');
+
+      const user = await User.findOne({
+        resetPasswordToken,
+        resetPasswordExpire: { $gt: Date.now() }
+      });
+
+      if (!user) {
+        return res.status(400).json({
+          success: false,
+          message: 'Invalid or expired reset token'
+        });
+      }
+
+      // Set new password
+      user.password = req.body.password;
+      user.resetPasswordToken = undefined;
+      user.resetPasswordExpire = undefined;
+      await user.save();
+
+      res.status(200).json({
+        success: true,
+        message: 'Password reset successful'
+      });
+
+    } catch (err) {
+      console.error('Password reset error:', err);
+      res.status(500).json({
+        success: false,
+        message: 'Server error during password reset'
+      });
+    }
 });
 
 module.exports = router;
