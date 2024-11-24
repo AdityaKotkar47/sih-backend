@@ -1,0 +1,86 @@
+/* Additional styles for documentation */
+
+/* Sidebar navigation */
+.sidebar-nav {
+    @apply fixed z-20 top-[3.8125rem] bottom-0 right-auto left-[max(0px,calc(50%-45rem))] w-72 overflow-y-auto hidden lg:block border-r border-slate-200 dark:border-slate-800;
+    padding: 1.5rem 1.5rem 1.5rem max(0.5rem, calc(50vw - 45rem));
+}
+
+/* Documentation content */
+.docs-content {
+    @apply ml-[max(0px,calc(50%-45rem))] lg:ml-72;
+    padding: 1.5rem 1.5rem 1.5rem max(1.5rem, calc(50vw - 45rem));
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+    @apply my-6 rounded-lg bg-slate-800 text-sm leading-6;
+}
+
+/* Inline code */
+:not(pre) > code {
+    @apply rounded bg-slate-100 px-1.5 py-0.5 text-slate-900 dark:bg-slate-800 dark:text-slate-300;
+}
+
+/* API endpoint badges */
+.api-badge {
+    @apply inline-flex items-center rounded-full px-3 py-1 text-sm font-medium ring-1 ring-inset;
+}
+
+.api-badge.get {
+    @apply bg-green-50 text-green-700 ring-green-600/20 dark:bg-green-500/10 dark:text-green-400 dark:ring-green-500/20;
+}
+
+.api-badge.post {
+    @apply bg-blue-50 text-blue-700 ring-blue-600/20 dark:bg-blue-500/10 dark:text-blue-400 dark:ring-blue-500/20;
+}
+
+.api-badge.put {
+    @apply bg-yellow-50 text-yellow-700 ring-yellow-600/20 dark:bg-yellow-500/10 dark:text-yellow-400 dark:ring-yellow-500/20;
+}
+
+.api-badge.delete {
+    @apply bg-red-50 text-red-700 ring-red-600/20 dark:bg-red-500/10 dark:text-red-400 dark:ring-red-500/20;
+}
+
+/* Table styles */
+.api-table {
+    @apply min-w-full divide-y divide-slate-200 dark:divide-slate-700;
+}
+
+.api-table th {
+    @apply px-4 py-3.5 text-left text-sm font-semibold text-slate-900 dark:text-slate-100;
+}
+
+.api-table td {
+    @apply px-4 py-4 text-sm text-slate-500 dark:text-slate-400;
+}
+
+/* Search box */
+.docs-search {
+    @apply relative flex items-center;
+}
+
+.docs-search input {
+    @apply h-10 w-full rounded-lg bg-slate-100 pl-10 pr-4 text-sm placeholder-slate-400 dark:bg-slate-800 dark:placeholder-slate-500;
+}
+
+.docs-search svg {
+    @apply absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400 dark:text-slate-500;
+}
+
+/* Dark mode toggle transition */
+.dark-mode-toggle svg {
+    @apply transition-transform duration-200;
+}
+
+.dark .dark-mode-toggle svg {
+    @apply rotate-180;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .docs-content {
+        margin-left: 0;
+    }
+}

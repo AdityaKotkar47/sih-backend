@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> - SIH API</title>
+    <meta name="description" content="<%= description || 'SIH API Documentation and Guides' %>">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom styles -->
+    <link rel="stylesheet" href="/css/docs.css">
+    
+    <!-- Prism.js for syntax highlighting -->
+    <link rel="stylesheet" href="/css/prism.css">
+</head>
+<body class="antialiased text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900">
+    
+    <%- include('../partials/header') %>
+    
+    <div class="overflow-hidden">
+        <%- body %>
+    </div>
+    
+    <%- include('../partials/footer') %>
+    
+    <!-- Scripts -->
+    <script src="/js/prism.js"></script>
+    <script src="/js/docs.js"></script>
+</body>
+</html>
