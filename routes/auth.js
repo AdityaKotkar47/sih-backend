@@ -3,7 +3,7 @@ const { body, validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const router = express.Router();
-const { limiter } = require('../config/rateLimiter');
+const { limiter, passwordResetLimiter } = require('../config/rateLimiter');
 const { sendEmail } = require('../utils/emailService');
 const { getResetPasswordTemplate } = require('../utils/emailTemplates');
 const crypto = require('crypto');
@@ -114,7 +114,7 @@ router.post('/login', loginValidation, async (req, res) => {
     }
 
     // Verify password
-    const isMatch = await user.comparePassword(password);
+    const isMatch = await user.matchPassword(password);
     if (!isMatch) {
       return res.status(400).json({ 
         success: false,
@@ -161,8 +161,8 @@ router.post('/forgot-password', async (req, res) => {
     const resetToken = user.generateResetToken();
     await user.save();
 
-    // Create reset url - Using FRONTEND_URL for the web interface
-    const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
+    // Create reset URL pointing to backend reset password page
+    const resetUrl = `${req.protocol}://${req.get('host')}/reset-password/${resetToken}`;
     
     // Send email
     const emailSent = await sendEmail(
@@ -197,53 +197,72 @@ router.post('/forgot-password', async (req, res) => {
 });
 
 // Reset Password
-router.post('/reset-password/:resetToken',
-  limiter,
-  [
-    body('password')
-      .isLength({ min: 6 })
-      .withMessage('Password must be 6 or more characters')
-      .matches(/\d/)
-      .withMessage('Password must contain a number')
-  ],
-  async (req, res) => {
-    try {
-      // Get hashed token
-      const resetPasswordToken = crypto
-        .createHash('sha256')
-        .update(req.params.resetToken)
-        .digest('hex');
+router.post('/reset-password/:resetToken', passwordResetLimiter, [
+  body('password')
+    .isLength({ min: 6 }).withMessage('Password must be 6 or more characters')
+    .matches(/\d/).withMessage('Password must contain a number')
+], async (req, res) => {
+  // Validate input
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({
+      success: false,
+      message: 'Validation errors',
+      errors: errors.array()
+    });
+  }
 
-      const user = await User.findOne({
-        resetPasswordToken,
-        resetPasswordExpire: { $gt: Date.now() }
-      });
+  try {
+    // Get hashed token
+    const resetPasswordToken = crypto
+      .createHash('sha256')
+      .update(req.params.resetToken)
+      .digest('hex');
 
-      if (!user) {
-        return res.status(400).json({
-          success: false,
-          message: 'Invalid or expired reset token'
-        });
-      }
+    const user = await User.findOne({
+      resetPasswordToken,
+      resetPasswordExpire: { $gt: Date.now() }
+    });
 
-      // Set new password
-      user.password = req.body.password;
-      user.resetPasswordToken = undefined;
-      user.resetPasswordExpire = undefined;
-      await user.save();
-
-      res.status(200).json({
-        success: true,
-        message: 'Password reset successful'
-      });
-
-    } catch (err) {
-      console.error('Password reset error:', err);
-      res.status(500).json({
+    if (!user) {
+      return res.status(400).json({
         success: false,
-        message: 'Server error during password reset'
+        message: 'Invalid or expired reset token'
       });
     }
+
+    // Set new password
+    user.password = req.body.password;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: 'Password reset successful. Please log in again.'
+    });
+
+  } catch (err) {
+    console.error('Password reset error:', err);
+    res.status(500).json({
+      success: false,
+      message: 'Server error during password reset'
+    });
+  }
+});
+
+// Reset Password Page
+router.get('/reset-password/:resetToken', async (req, res) => {
+  try {
+    const { resetToken } = req.params;
+
+    // Optionally, perform initial validation of the token here
+
+    res.render('resetPassword', { resetToken });
+  } catch (err) {
+    console.error('Error rendering reset password page:', err);
+    res.status(500).send('Server Error');
+  }
 });
 
 module.exports = router;

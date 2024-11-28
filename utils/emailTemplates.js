@@ -7,40 +7,49 @@ const getResetPasswordTemplate = (resetUrl) => {
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Reset Your Password</title>
       <style>
-        /* Add custom styles here */
+        /* Railway Theme Styles */
+        body {
+          background-color: #f0f4f8;
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          color: #333333;
+        }
         .container {
           max-width: 600px;
           margin: 0 auto;
-          padding: 20px;
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-          line-height: 1.5;
-          color: #1a202c;
+          padding: 30px;
+          background-color: #ffffff;
+          border-radius: 8px;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         .header {
           text-align: center;
           margin-bottom: 30px;
         }
         .logo {
-          font-size: 24px;
+          font-size: 28px;
           font-weight: bold;
-          color: #2563eb;
+          color: #1e3a8a; /* Railway Blue */
         }
         .button {
           display: inline-block;
-          padding: 12px 24px;
-          background-color: #2563eb;
-          color: white;
+          padding: 14px 28px;
+          background-color: #1e3a8a; /* Railway Blue */
+          color: #ffffff;
           text-decoration: none;
           border-radius: 6px;
-          font-weight: 500;
-          margin: 20px 0;
+          font-weight: 600;
+          transition: background-color 0.3s ease;
+        }
+        .button:hover {
+          background-color: #3b82f6; /* Railway Hover Blue */
         }
         .footer {
           margin-top: 30px;
           padding-top: 20px;
           border-top: 1px solid #e2e8f0;
           font-size: 14px;
-          color: #64748b;
+          color: #6b7280;
+          text-align: center;
         }
       </style>
     </head>

@@ -55,6 +55,14 @@ app.get('/', (req, res) => {
     });
 });
 
+// Add this route to render the Reset Password page
+app.get('/reset-password/:resetToken', (req, res) => {
+    res.render('resetPassword', { 
+        resetToken: req.params.resetToken,
+        layout: false
+    });
+});
+
 // API Documentation route
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));    
 
