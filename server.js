@@ -10,6 +10,7 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./config/docs');
 const rateLimit = require('express-rate-limit');
 const { limiter } = require('./config/rateLimiter');
+const itineraryRoutes = require('./routes/itinerary');
 
 // Load env vars
 dotenv.config();
@@ -61,6 +62,7 @@ app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/users', require('./routes/user'));
 app.use('/api/stations', require('./routes/station'));
+app.use('/api/itineraries', itineraryRoutes);
 
 // Health check route
 app.get('/health', (req, res) => {

@@ -11,7 +11,7 @@ router.get('/me', authMiddleware, async (req, res) => {
         const user = await User.findById(req.user.id).select('-password');
         res.json({
             success: true,
-            user
+            data: user
         });
     } catch (err) {
         console.error(err.message);

@@ -1,11 +1,11 @@
 module.exports = {
     openapi: '3.0.0',
     info: {
-      title: 'Pravaah API Documentation',
+      title: 'SIH Backend API Documentation',
       version: '1.0.0',
-      description: 'Complete API documentation for Pravaah authentication and user management',
+      description: 'Complete API documentation for SIH backend services.',
       contact: {
-        name: 'Pravaah Support',
+        name: 'SIH Support',
         email: 'sih.pravaah@gmail.com'
       }
     },
@@ -20,9 +20,10 @@ module.exports = {
     components: {
       securitySchemes: {
         bearerAuth: {
-          type: 'http',
-          scheme: 'bearer',
-          bearerFormat: 'JWT'
+          type: 'apiKey',
+          name: 'x-auth-token',
+          in: 'header',
+          description: 'JWT token required for authentication. Provide it in the `x-auth-token` header.'
         }
       },
       schemas: {
@@ -53,7 +54,208 @@ module.exports = {
             },
             message: {
               type: 'string'
+            },
+            error: {
+              type: 'string'
             }
+          }
+        },
+        Itinerary: {
+          type: 'object',
+          properties: {
+            _id: { type: 'string' },
+            location: { type: 'string' },
+            hotels: {
+              type: 'array',
+              items: { $ref: '#/components/schemas/Hotel' }
+            },
+            tourist_spots: {
+              type: 'array',
+              items: { $ref: '#/components/schemas/TouristSpot' }
+            },
+            restaurants: {
+              type: 'array',
+              items: { $ref: '#/components/schemas/Restaurant' }
+            },
+            market_places: {
+              type: 'array',
+              items: { $ref: '#/components/schemas/Marketplace' }
+            },
+            createdAt: { type: 'string', format: 'date-time' },
+            lastUpdated: { type: 'string', format: 'date-time' }
+          }
+        },
+        ItineraryInput: {
+          type: 'object',
+          required: ['location'],
+          properties: {
+            location: { type: 'string' },
+            hotels: {
+              type: 'array',
+              items: { $ref: '#/components/schemas/HotelInput' }
+            },
+            tourist_spots: {
+              type: 'array',
+              items: { $ref: '#/components/schemas/TouristSpotInput' }
+            },
+            restaurants: {
+              type: 'array',
+              items: { $ref: '#/components/schemas/RestaurantInput' }
+            },
+            market_places: {
+              type: 'array',
+              items: { $ref: '#/components/schemas/MarketplaceInput' }
+            }
+          }
+        },
+        Hotel: {
+          type: 'object',
+          properties: {
+            name: { type: 'string' },
+            address: { type: 'string' },
+            map_url: { type: 'string' },
+            image_url: { type: 'string' },
+            ratings: { type: 'number' }
+          }
+        },
+        HotelInput: {
+          type: 'object',
+          required: ['name', 'address', 'map_url', 'image_url', 'ratings'],
+          properties: {
+            name: { type: 'string' },
+            address: { type: 'string' },
+            map_url: { type: 'string' },
+            image_url: { type: 'string' },
+            ratings: { type: 'number' }
+          }
+        },
+        TouristSpot: {
+          type: 'object',
+          properties: {
+            name: { type: 'string' },
+            address: { type: 'string' },
+            map_url: { type: 'string' },
+            image_url: { type: 'string' },
+            ratings: { type: 'number' }
+          }
+        },
+        TouristSpotInput: {
+          type: 'object',
+          required: ['name', 'address', 'map_url', 'image_url', 'ratings'],
+          properties: {
+            name: { type: 'string' },
+            address: { type: 'string' },
+            map_url: { type: 'string' },
+            image_url: { type: 'string' },
+            ratings: { type: 'number' }
+          }
+        },
+        Restaurant: {
+          type: 'object',
+          properties: {
+            name: { type: 'string' },
+            address: { type: 'string' },
+            map_url: { type: 'string' },
+            image_url: { type: 'string' },
+            ratings: { type: 'number' }
+          }
+        },
+        RestaurantInput: {
+          type: 'object',
+          required: ['name', 'address', 'map_url', 'image_url', 'ratings'],
+          properties: {
+            name: { type: 'string' },
+            address: { type: 'string' },
+            map_url: { type: 'string' },
+            image_url: { type: 'string' },
+            ratings: { type: 'number' }
+          }
+        },
+        Marketplace: {
+          type: 'object',
+          properties: {
+            name: { type: 'string' },
+            address: { type: 'string' },
+            map_url: { type: 'string' },
+            image_url: { type: 'string' },
+            ratings: { type: 'number' }
+          }
+        },
+        MarketplaceInput: {
+          type: 'object',
+          required: ['name', 'address', 'map_url', 'image_url', 'ratings'],
+          properties: {
+            name: { type: 'string' },
+            address: { type: 'string' },
+            map_url: { type: 'string' },
+            image_url: { type: 'string' },
+            ratings: { type: 'number' }
+          }
+        },
+        Station: {
+          type: 'object',
+          properties: {
+            _id: { type: 'string' },
+            name: { type: 'string' },
+            location: { type: 'string' },
+            facilities: {
+              type: 'array',
+              items: { $ref: '#/components/schemas/Facility' }
+            },
+            connections: {
+              type: 'array',
+              items: { $ref: '#/components/schemas/Connection' }
+            },
+            createdAt: { type: 'string', format: 'date-time' },
+            lastUpdated: { type: 'string', format: 'date-time' }
+          }
+        },
+        StationInput: {
+          type: 'object',
+          required: ['name', 'location'],
+          properties: {
+            name: { type: 'string' },
+            location: { type: 'string' },
+            facilities: {
+              type: 'array',
+              items: { $ref: '#/components/schemas/FacilityInput' }
+            },
+            connections: {
+              type: 'array',
+              items: { $ref: '#/components/schemas/ConnectionInput' }
+            }
+          }
+        },
+        Facility: {
+          type: 'object',
+          properties: {
+            type: { type: 'string' },
+            description: { type: 'string' }
+          }
+        },
+        FacilityInput: {
+          type: 'object',
+          required: ['type', 'description'],
+          properties: {
+            type: { type: 'string' },
+            description: { type: 'string' }
+          }
+        },
+        Connection: {
+          type: 'object',
+          properties: {
+            line: { type: 'string' },
+            destination: { type: 'string' },
+            duration: { type: 'number' }
+          }
+        },
+        ConnectionInput: {
+          type: 'object',
+          required: ['line', 'destination', 'duration'],
+          properties: {
+            line: { type: 'string' },
+            destination: { type: 'string' },
+            duration: { type: 'number' }
           }
         }
       }
@@ -366,6 +568,371 @@ module.exports = {
             }
           }
         }
+      },
+      '/api/itineraries/search/{location}': {
+        get: {
+          tags: ['Itineraries'],
+          summary: 'Search itineraries by location',
+          description: 'Retrieve an itinerary based on the specified location.',
+          parameters: [
+            {
+              name: 'location',
+              in: 'path',
+              required: true,
+              description: 'Location to search for itineraries',
+              schema: {
+                type: 'string'
+              }
+            }
+          ],
+          responses: {
+            200: {
+              description: 'Itinerary found',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      success: { type: 'boolean' },
+                      data: { $ref: '#/components/schemas/Itinerary' }
+                    }
+                  }
+                }
+              }
+            },
+            404: {
+              description: 'Itinerary not found',
+              content: {
+                'application/json': {
+                  schema: { $ref: '#/components/schemas/Error' },
+                  example: {
+                    success: false,
+                    message: 'Itinerary not found'
+                  }
+                }
+              }
+            },
+            500: {
+              description: 'Server error',
+              content: {
+                'application/json': {
+                  schema: { $ref: '#/components/schemas/Error' },
+                  example: {
+                    success: false,
+                    message: 'Server Error',
+                    error: 'Error message'
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      '/api/itineraries': {
+        post: {
+          tags: ['Itineraries'],
+          summary: 'Add or update an itinerary',
+          description: 'Create a new itinerary or update an existing one based on location.',
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/ItineraryInput' }
+              }
+            }
+          },
+          responses: {
+            201: {
+              description: 'Itinerary created or updated successfully',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      success: { type: 'boolean' },
+                      data: { $ref: '#/components/schemas/Itinerary' }
+                    }
+                  }
+                }
+              }
+            },
+            400: {
+              description: 'Invalid data',
+              content: {
+                'application/json': {
+                  schema: { $ref: '#/components/schemas/Error' },
+                  example: {
+                    success: false,
+                    message: 'Invalid data',
+                    error: 'Error message'
+                  }
+                }
+              }
+            },
+            500: {
+              description: 'Server error',
+              content: {
+                'application/json': {
+                  schema: { $ref: '#/components/schemas/Error' },
+                  example: {
+                    success: false,
+                    message: 'Server Error',
+                    error: 'Error message'
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      '/api/stations/search/{name}': {
+        get: {
+          tags: ['Stations'],
+          summary: 'Search stations by name',
+          description: 'Retrieve a station based on the specified name.',
+          parameters: [
+            {
+              name: 'name',
+              in: 'path',
+              required: true,
+              description: 'Name of the station to search for',
+              schema: {
+                type: 'string'
+              }
+            }
+          ],
+          responses: {
+            200: {
+              description: 'Station found',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      success: { type: 'boolean' },
+                      data: { $ref: '#/components/schemas/Station' }
+                    }
+                  }
+                }
+              }
+            },
+            404: {
+              description: 'Station not found',
+              content: {
+                'application/json': {
+                  schema: { $ref: '#/components/schemas/Error' },
+                  example: {
+                    success: false,
+                    message: 'Station not found'
+                  }
+                }
+              }
+            },
+            500: {
+              description: 'Server error',
+              content: {
+                'application/json': {
+                  schema: { $ref: '#/components/schemas/Error' },
+                  example: {
+                    success: false,
+                    message: 'Server Error',
+                    error: 'Error message'
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      '/api/stations': {
+        post: {
+          tags: ['Stations'],
+          summary: 'Add or update a station',
+          description: 'Create a new station or update an existing one based on name.',
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/StationInput' }
+              }
+            }
+          },
+          responses: {
+            201: {
+              description: 'Station created or updated successfully',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      success: { type: 'boolean' },
+                      data: { $ref: '#/components/schemas/Station' }
+                    }
+                  }
+                }
+              }
+            },
+            400: {
+              description: 'Invalid data',
+              content: {
+                'application/json': {
+                  schema: { $ref: '#/components/schemas/Error' },
+                  example: {
+                    success: false,
+                    message: 'Invalid data',
+                    error: 'Error message'
+                  }
+                }
+              }
+            },
+            500: {
+              description: 'Server error',
+              content: {
+                'application/json': {
+                  schema: { $ref: '#/components/schemas/Error' },
+                  example: {
+                    success: false,
+                    message: 'Server Error',
+                    error: 'Error message'
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      '/api/users/me': {
+        get: {
+          tags: ['Authentication'],
+          summary: 'Get Current User',
+          description: 'Retrieve the information of the currently authenticated user.',
+          security: [
+            {
+              bearerAuth: []
+            }
+          ],
+          responses: {
+            200: {
+              description: 'User retrieved successfully',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      success: { type: 'boolean' },
+                      data: { $ref: '#/components/schemas/User' }
+                    }
+                  }
+                }
+              }
+            },
+            401: {
+              description: 'Unauthorized',
+              content: {
+                'application/json': {
+                  schema: { $ref: '#/components/schemas/Error' },
+                  example: {
+                    success: false,
+                    message: 'Unauthorized. Please provide a valid token.'
+                  }
+                }
+              }
+            },
+            404: {
+              description: 'User Not Found',
+              content: {
+                'application/json': {
+                  schema: { $ref: '#/components/schemas/Error' },
+                  example: {
+                    success: false,
+                    message: 'User not found'
+                  }
+                }
+              }
+            },
+            500: {
+              description: 'Server Error',
+              content: {
+                'application/json': {
+                  schema: { $ref: '#/components/schemas/Error' },
+                  example: {
+                    success: false,
+                    message: 'Server Error',
+                    error: 'Detailed error message'
+                  }
+                }
+              }
+            }
+          }
+        },
+        put: {
+          tags: ['Authentication'],
+          summary: 'Update Current User',
+          description: 'Update the profile information of the currently authenticated user.',
+          security: [
+            {
+              bearerAuth: []
+            }
+          ],
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    username: {
+                      type: 'string',
+                      example: 'newusername'
+                    }
+                    // Add other fields that can be updated
+                  }
+                }
+              }
+            }
+          },
+          responses: {
+            200: {
+              description: 'User updated successfully',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      success: { type: 'boolean' },
+                      user: { $ref: '#/components/schemas/User' }
+                    }
+                  }
+                }
+              }
+            },
+            401: {
+              description: 'Unauthorized',
+              content: {
+                'application/json': {
+                  schema: { $ref: '#/components/schemas/Error' },
+                  example: {
+                    success: false,
+                    message: 'Unauthorized. Please provide a valid token.'
+                  }
+                }
+              }
+            },
+            500: {
+              description: 'Server Error',
+              content: {
+                'application/json': {
+                  schema: { $ref: '#/components/schemas/Error' },
+                  example: {
+                    success: false,
+                    message: 'Server Error',
+                    error: 'Detailed error message'
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     },
     security: [
@@ -376,7 +943,15 @@ module.exports = {
     tags: [
       {
         name: 'Authentication',
-        description: 'API endpoints for user authentication and password management'
+        description: 'API endpoints for user authentication and profile management'
+      },
+      {
+        name: 'Itineraries',
+        description: 'API endpoints for managing itineraries'
+      },
+      {
+        name: 'Stations',
+        description: 'API endpoints for managing stations'
       }
     ]
   };
