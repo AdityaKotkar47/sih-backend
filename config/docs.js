@@ -257,6 +257,55 @@ module.exports = {
             destination: { type: 'string' },
             duration: { type: 'number' }
           }
+        },
+        Complaint: {
+          type: 'object',
+          properties: {
+            _id: { 
+              type: 'string',
+              description: 'Complaint ID'
+            },
+            referenceNo: {
+              type: 'number',
+              description: 'Unique reference number for the complaint'
+            },
+            type: {
+              type: 'string',
+              description: 'Type of complaint (e.g., "woman")'
+            },
+            description: {
+              type: 'string',
+              description: 'Detailed description of the complaint'
+            },
+            resolved: {
+              type: 'boolean',
+              description: 'Whether the complaint has been resolved',
+              default: false
+            },
+            createdAt: {
+              type: 'string',
+              format: 'date-time',
+              description: 'Timestamp when the complaint was created'
+            }
+          }
+        },
+        ComplaintInput: {
+          type: 'object',
+          required: ['referenceNo', 'type', 'description'],
+          properties: {
+            referenceNo: {
+              type: 'number',
+              description: 'Unique reference number for the complaint'
+            },
+            type: {
+              type: 'string',
+              description: 'Type of complaint (e.g., "woman")'
+            },
+            description: {
+              type: 'string',
+              description: 'Detailed description of the complaint'
+            }
+          }
         }
       }
     },
@@ -933,6 +982,176 @@ module.exports = {
             }
           }
         }
+      },
+      '/api/complaints/create': {
+        post: {
+          tags: ['Complaints'],
+          summary: 'Create a new complaint',
+          description: 'Creates a new complaint with the provided details. Requires authentication.',
+          security: [{ bearerAuth: [] }],
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/ComplaintInput'
+                }
+              }
+            }
+          },
+          responses: {
+            201: {
+              description: 'Complaint created successfully',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      success: {
+                        type: 'boolean',
+                        example: true
+                      },
+                      data: {
+                        $ref: '#/components/schemas/Complaint'
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            400: {
+              description: 'Bad request',
+              content: {
+                'application/json': {
+                  schema: {
+                    $ref: '#/components/schemas/Error'
+                  }
+                }
+              }
+            },
+            401: {
+              description: 'Unauthorized - Invalid or missing authentication token',
+              content: {
+                'application/json': {
+                  schema: {
+                    $ref: '#/components/schemas/Error'
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      '/api/complaints/reference/{referenceNo}': {
+        get: {
+          tags: ['Complaints'],
+          summary: 'Get complaint by reference number',
+          description: 'Retrieves a complaint using its unique reference number',
+          parameters: [
+            {
+              name: 'referenceNo',
+              in: 'path',
+              required: true,
+              description: 'Reference number of the complaint',
+              schema: {
+                type: 'number'
+              }
+            }
+          ],
+          responses: {
+            200: {
+              description: 'Complaint retrieved successfully',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      success: {
+                        type: 'boolean',
+                        example: true
+                      },
+                      data: {
+                        $ref: '#/components/schemas/Complaint'
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            404: {
+              description: 'Complaint not found',
+              content: {
+                'application/json': {
+                  schema: {
+                    $ref: '#/components/schemas/Error'
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      '/api/complaints/filter': {
+        get: {
+          tags: ['Complaints'],
+          summary: 'Filter complaints',
+          description: 'Retrieves complaints based on type and resolved status. Requires authentication.',
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            {
+              name: 'type',
+              in: 'query',
+              required: false,
+              description: 'Filter by complaint type',
+              schema: {
+                type: 'string'
+              }
+            },
+            {
+              name: 'resolved',
+              in: 'query',
+              required: false,
+              description: 'Filter by resolved status',
+              schema: {
+                type: 'boolean'
+              }
+            }
+          ],
+          responses: {
+            200: {
+              description: 'Complaints retrieved successfully',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      success: {
+                        type: 'boolean',
+                        example: true
+                      },
+                      data: {
+                        type: 'array',
+                        items: {
+                          $ref: '#/components/schemas/Complaint'
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            401: {
+              description: 'Unauthorized - Invalid or missing authentication token',
+              content: {
+                'application/json': {
+                  schema: {
+                    $ref: '#/components/schemas/Error'
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     },
     security: [
@@ -952,6 +1171,10 @@ module.exports = {
       {
         name: 'Stations',
         description: 'API endpoints for managing stations'
+      },
+      {
+        name: 'Complaints',
+        description: 'API endpoints for managing complaints'
       }
     ]
   };
