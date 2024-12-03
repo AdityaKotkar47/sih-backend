@@ -1,0 +1,111 @@
+<div class="relative mx-auto flex max-w-8xl justify-center sm:px-2 lg:px-8 xl:px-12">
+    <div class="min-w-0 max-w-2xl flex-auto px-4 py-16 lg:max-w-none lg:pl-8 lg:pr-0 xl:px-16">
+        <article>
+            <!-- Hero section -->
+            <header class="mb-9 space-y-1">
+                <p class="font-display text-sm font-medium text-sky-500">
+                    v1.0.0
+                </p>
+                <h1 class="font-display text-3xl tracking-tight text-slate-900 dark:text-white">
+                    SIH Backend API Documentation
+                </h1>
+            </header>
+
+            <!-- Quick Start section -->
+            <div class="prose prose-slate mt-8 dark:prose-dark">
+                <p class="lead">
+                    Welcome to the SIH Backend API documentation. This API provides endpoints for managing stations, users, and authentication.
+                </p>
+
+                <div class="not-prose my-12 grid grid-cols-1 gap-6 sm:grid-cols-2">
+                    <!-- Get Started Card -->
+                    <div class="group relative rounded-xl border border-slate-200 dark:border-slate-800">
+                        <div class="absolute -inset-px rounded-xl border-2 border-transparent opacity-0 [background:linear-gradient(var(--quick-links-hover-bg,theme(colors.sky.50)),var(--quick-links-hover-bg,theme(colors.sky.50)))_padding-box,linear-gradient(to_top,theme(colors.indigo.400),theme(colors.cyan.400),theme(colors.sky.500))_border-box] group-hover:opacity-100 dark:[--quick-links-hover-bg:theme(colors.slate.800)]"></div>
+                        <div class="relative overflow-hidden rounded-xl p-6">
+                            <h2 class="font-display text-base text-slate-900 dark:text-white">
+                                <a href="/docs/getting-started">
+                                    <span class="absolute -inset-px rounded-xl"></span>
+                                    Getting Started
+                                </a>
+                            </h2>
+                            <p class="mt-1 text-sm text-slate-700 dark:text-slate-400">
+                                Learn how to get started with our API, including authentication and basic usage.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- API Reference Card -->
+                    <div class="group relative rounded-xl border border-slate-200 dark:border-slate-800">
+                        <div class="absolute -inset-px rounded-xl border-2 border-transparent opacity-0 [background:linear-gradient(var(--quick-links-hover-bg,theme(colors.sky.50)),var(--quick-links-hover-bg,theme(colors.sky.50)))_padding-box,linear-gradient(to_top,theme(colors.indigo.400),theme(colors.cyan.400),theme(colors.sky.500))_border-box] group-hover:opacity-100 dark:[--quick-links-hover-bg:theme(colors.slate.800)]"></div>
+                        <div class="relative overflow-hidden rounded-xl p-6">
+                            <h2 class="font-display text-base text-slate-900 dark:text-white">
+                                <a href="/docs/api-reference">
+                                    <span class="absolute -inset-px rounded-xl"></span>
+                                    API Reference
+                                </a>
+                            </h2>
+                            <p class="mt-1 text-sm text-slate-700 dark:text-slate-400">
+                                Complete reference documentation for all API endpoints.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Features Grid -->
+                <h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Features</h2>
+                <div class="mt-6 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                    <!-- Authentication -->
+                    <div class="pt-6">
+                        <div class="flow-root rounded-lg bg-slate-50 px-6 pb-8 dark:bg-slate-800/60">
+                            <div class="-mt-6">
+                                <div class="inline-flex items-center justify-center rounded-md bg-sky-500 p-3 shadow-lg">
+                                    <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="mt-8 text-lg font-medium tracking-tight text-slate-900 dark:text-white">Secure Authentication</h3>
+                                <p class="mt-5 text-base text-slate-500 dark:text-slate-400">
+                                    JWT-based authentication with refresh tokens and secure session management.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Real-time Updates -->
+                    <div class="pt-6">
+                        <div class="flow-root rounded-lg bg-slate-50 px-6 pb-8 dark:bg-slate-800/60">
+                            <div class="-mt-6">
+                                <div class="inline-flex items-center justify-center rounded-md bg-sky-500 p-3 shadow-lg">
+                                    <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="mt-8 text-lg font-medium tracking-tight text-slate-900 dark:text-white">Real-time Updates</h3>
+                                <p class="mt-5 text-base text-slate-500 dark:text-slate-400">
+                                    Real-time station data updates using WebSocket connections.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Rate Limiting -->
+                    <div class="pt-6">
+                        <div class="flow-root rounded-lg bg-slate-50 px-6 pb-8 dark:bg-slate-800/60">
+                            <div class="-mt-6">
+                                <div class="inline-flex items-center justify-center rounded-md bg-sky-500 p-3 shadow-lg">
+                                    <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="mt-8 text-lg font-medium tracking-tight text-slate-900 dark:text-white">Rate Limiting</h3>
+                                <p class="mt-5 text-base text-slate-500 dark:text-slate-400">
+                                    Built-in rate limiting to protect your API from abuse.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </div>
+</div>
