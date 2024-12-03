@@ -987,8 +987,7 @@ module.exports = {
         post: {
           tags: ['Complaints'],
           summary: 'Create a new complaint',
-          description: 'Creates a new complaint with the provided details. Requires authentication.',
-          security: [{ bearerAuth: [] }],
+          description: 'Creates a new complaint with the provided details.',
           requestBody: {
             required: true,
             content: {
@@ -1021,16 +1020,6 @@ module.exports = {
             },
             400: {
               description: 'Bad request',
-              content: {
-                'application/json': {
-                  schema: {
-                    $ref: '#/components/schemas/Error'
-                  }
-                }
-              }
-            },
-            401: {
-              description: 'Unauthorized - Invalid or missing authentication token',
               content: {
                 'application/json': {
                   schema: {

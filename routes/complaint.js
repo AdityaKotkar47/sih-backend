@@ -1,12 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const Complaint = require('../models/Complaint');
-const auth = require('../middleware/auth');
 
 // Create a new complaint
-router.post('/create', auth, async (req, res) => {
+router.post('/create', async (req, res) => {
     try {
-        const {referenceNo, type, description } = req.body;
+        const { referenceNo, type, description } = req.body;
         
         const complaint = new Complaint({
             referenceNo,
@@ -53,7 +52,7 @@ router.get('/reference/:referenceNo', async (req, res) => {
 });
 
 // Get complaints with filters
-router.get('/filter', auth, async (req, res) => {
+router.get('/filter', async (req, res) => {
     try {
         const { type, resolved } = req.query;
         const query = {};
