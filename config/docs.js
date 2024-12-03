@@ -2,7 +2,7 @@ module.exports = {
     openapi: '3.0.0',
     info: {
       title: 'SIH Backend API Documentation',
-      version: '1.0.0',
+      version: '1.1.2',
       description: 'Complete API documentation for SIH backend services.',
       contact: {
         name: 'SIH Support',
