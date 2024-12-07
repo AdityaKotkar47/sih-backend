@@ -12,7 +12,7 @@ module.exports = {
     servers: [
       {
         url: process.env.NODE_ENV === 'production' 
-          ? 'https://sih-pravaah.onrender.com'
+          ? 'https://api.pravaah.xyz'
           : `http://localhost:${process.env.PORT || 5000}`,
         description: process.env.NODE_ENV === 'production' ? 'Production server' : 'Development server'
       }
