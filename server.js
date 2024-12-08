@@ -20,6 +20,16 @@ connectDB();
 
 const app = express();
 
+// Log incoming requests
+app.use(morgan(':method :url', {
+  immediate: true,
+  stream: {
+    write: (message) => {
+      console.log(message.trim());
+    }
+  }
+}));
+
 // View engine setup
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -55,7 +65,7 @@ app.get('/', (req, res) => {
     });
 });
 
-// Add this route to render the Reset Password page
+// to render the Reset Password page
 app.get('/reset-password/:resetToken', (req, res) => {
     res.render('resetPassword', { 
         resetToken: req.params.resetToken,
@@ -71,6 +81,7 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/users', require('./routes/user'));
 app.use('/api/stations', require('./routes/station'));
 app.use('/api/itineraries', itineraryRoutes);
+app.use('/api/complaints', require('./routes/complaint'));
 
 // Health check route
 app.get('/health', (req, res) => {
