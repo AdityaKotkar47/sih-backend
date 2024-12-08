@@ -20,6 +20,16 @@ connectDB();
 
 const app = express();
 
+// Log incoming requests
+app.use(morgan(':method :url', {
+  immediate: true,
+  stream: {
+    write: (message) => {
+      console.log(message.trim());
+    }
+  }
+}));
+
 // View engine setup
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
