@@ -82,6 +82,7 @@ app.use('/api/users', require('./routes/user'));
 app.use('/api/stations', require('./routes/station'));
 app.use('/api/itineraries', itineraryRoutes);
 app.use('/api/complaints', require('./routes/complaint'));
+app.use('/api/reports', require('./routes/report'));
 
 // Health check route
 app.get('/health', (req, res) => {

@@ -306,6 +306,45 @@ module.exports = {
               description: 'Detailed description of the complaint'
             }
           }
+        },
+        Report: {
+          type: 'object',
+          properties: {
+            _id: { type: 'string' },
+            coordinates: {
+              type: 'object',
+              properties: {
+                latitude: { type: 'number' },
+                longitude: { type: 'number' }
+              },
+              required: ['latitude', 'longitude']
+            },
+            type: {
+              type: 'string',
+              enum: ['congestion', 'amenity_missing', 'amenity_unavailable']
+            },
+            description: { type: 'string' },
+            createdAt: { type: 'string', format: 'date-time' }
+          }
+        },
+        ReportInput: {
+          type: 'object',
+          required: ['coordinates', 'type'],
+          properties: {
+            coordinates: {
+              type: 'object',
+              properties: {
+                latitude: { type: 'number' },
+                longitude: { type: 'number' }
+              },
+              required: ['latitude', 'longitude']
+            },
+            type: {
+              type: 'string',
+              enum: ['congestion', 'amenity_missing', 'amenity_unavailable']
+            },
+            description: { type: 'string' }
+          }
         }
       }
     },
@@ -1141,6 +1180,85 @@ module.exports = {
             }
           }
         }
+      },
+      '/api/reports': {
+        post: {
+          tags: ['Reports'],
+          summary: 'Create a new report',
+          description: 'Create a new report for issues like congestion or amenity problems',
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/ReportInput'
+                }
+              }
+            }
+          },
+          responses: {
+            201: {
+              description: 'Report created successfully',
+              content: {
+                'application/json': {
+                  schema: {
+                    $ref: '#/components/schemas/Report'
+                  }
+                }
+              }
+            },
+            400: {
+              description: 'Invalid input',
+              content: {
+                'application/json': {
+                  schema: {
+                    $ref: '#/components/schemas/Error'
+                  }
+                }
+              }
+            },
+            500: {
+              description: 'Server error',
+              content: {
+                'application/json': {
+                  schema: {
+                    $ref: '#/components/schemas/Error'
+                  }
+                }
+              }
+            }
+          }
+        },
+        get: {
+          tags: ['Reports'],
+          summary: 'Get all reports',
+          description: 'Retrieve all reports sorted by creation date (newest first)',
+          responses: {
+            200: {
+              description: 'List of all reports',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'array',
+                    items: {
+                      $ref: '#/components/schemas/Report'
+                    }
+                  }
+                }
+              }
+            },
+            500: {
+              description: 'Server error',
+              content: {
+                'application/json': {
+                  schema: {
+                    $ref: '#/components/schemas/Error'
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     },
     security: [
@@ -1164,6 +1282,10 @@ module.exports = {
       {
         name: 'Complaints',
         description: 'API endpoints for managing complaints'
+      },
+      {
+        name: 'Reports',
+        description: 'API endpoints for managing reports'
       }
     ]
   };
