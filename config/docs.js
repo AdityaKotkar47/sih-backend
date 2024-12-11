@@ -925,63 +925,6 @@ module.exports = {
           }
         }
       },
-      '/api/stations': {
-        post: {
-          tags: ['Stations'],
-          summary: 'Add or update a station',
-          description: 'Create a new station or update an existing one based on name.',
-          requestBody: {
-            required: true,
-            content: {
-              'application/json': {
-                schema: { $ref: '#/components/schemas/StationInput' }
-              }
-            }
-          },
-          responses: {
-            201: {
-              description: 'Station created or updated successfully',
-              content: {
-                'application/json': {
-                  schema: {
-                    type: 'object',
-                    properties: {
-                      success: { type: 'boolean' },
-                      data: { $ref: '#/components/schemas/Station' }
-                    }
-                  }
-                }
-              }
-            },
-            400: {
-              description: 'Invalid data',
-              content: {
-                'application/json': {
-                  schema: { $ref: '#/components/schemas/Error' },
-                  example: {
-                    success: false,
-                    message: 'Invalid data',
-                    error: 'Error message'
-                  }
-                }
-              }
-            },
-            500: {
-              description: 'Server error',
-              content: {
-                'application/json': {
-                  schema: { $ref: '#/components/schemas/Error' },
-                  example: {
-                    success: false,
-                    message: 'Server Error',
-                    error: 'Error message'
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
       '/api/users/me': {
         get: {
           tags: ['Authentication'],
