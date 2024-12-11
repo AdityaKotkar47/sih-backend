@@ -795,11 +795,7 @@ module.exports = {
               content: {
                 'application/json': {
                   schema: {
-                    type: 'object',
-                    properties: {
-                      success: { type: 'boolean' },
-                      data: { $ref: '#/components/schemas/Station' }
-                    }
+                    $ref: '#/components/schemas/Station'
                   }
                 }
               }
@@ -826,6 +822,103 @@ module.exports = {
                     message: 'Server Error',
                     error: 'Error message'
                   }
+                }
+              }
+            }
+          }
+        }
+      },
+      '/api/stations/{name}/amenities': {
+        put: {
+          tags: ['Stations'],
+          summary: 'Update amenity visibility',
+          description: 'Update the visibility of a specific amenity vertex in a station (Admin only)',
+          parameters: [
+            {
+              name: 'name',
+              in: 'path',
+              required: true,
+              description: 'Name of the station',
+              schema: {
+                type: 'string'
+              }
+            }
+          ],
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  required: ['vertexId', 'visible'],
+                  properties: {
+                    vertexId: {
+                      type: 'string',
+                      description: 'ID of the vertex to update'
+                    },
+                    visible: {
+                      type: 'boolean',
+                      description: 'New visibility status'
+                    }
+                  }
+                }
+              }
+            }
+          },
+          responses: {
+            200: {
+              description: 'Amenity visibility updated successfully',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      success: {
+                        type: 'boolean',
+                        example: true
+                      },
+                      message: {
+                        type: 'string',
+                        example: 'Amenity visibility updated to true'
+                      },
+                      vertex: {
+                        type: 'object',
+                        description: 'Updated vertex data'
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            400: {
+              description: 'Invalid request data',
+              content: {
+                'application/json': {
+                  schema: { $ref: '#/components/schemas/Error' },
+                  example: {
+                    success: false,
+                    message: 'Please provide vertexId and visibility status'
+                  }
+                }
+              }
+            },
+            404: {
+              description: 'Station or vertex not found',
+              content: {
+                'application/json': {
+                  schema: { $ref: '#/components/schemas/Error' },
+                  example: {
+                    success: false,
+                    message: 'Station not found'
+                  }
+                }
+              }
+            },
+            500: {
+              description: 'Server error',
+              content: {
+                'application/json': {
+                  schema: { $ref: '#/components/schemas/Error' }
                 }
               }
             }

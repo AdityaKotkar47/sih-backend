@@ -7,9 +7,21 @@ const StationSchema = new mongoose.Schema({
     trim: true
   },
   data: {
-    mapData: Object,  // Store map-related data
-    metadata: Object, // Store any additional metadata
-    // Add other specific fields you need
+    mapData: {
+      vertices: [{
+        id: String,
+        objectName: String,
+        cx: Number,
+        cy: Number,
+        visible: Boolean
+      }],
+      edges: [{
+        id: String,
+        from: String,
+        to: String
+      }]
+    },
+    floorplan: String
   },
   lastUpdated: {
     type: Date,

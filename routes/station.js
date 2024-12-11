@@ -19,10 +19,7 @@ router.get('/search/:name', async (req, res) => {
       });
     }
 
-    res.json({
-      success: true,
-      data: station
-    });
+    res.json(station);
   } catch (err) {
     console.error('Search error:', err);
     res.status(500).json({
@@ -33,39 +30,58 @@ router.get('/search/:name', async (req, res) => {
   }
 });
 
-// Add new station data
-router.post('/', async (req, res) => {
+// Update amenity visibility
+router.put('/:name/amenities', async (req, res) => {
   try {
-    const { name, data } = req.body;
-    
-    // Check if station exists
-    let station = await Station.findOne({ 
-      name: { $regex: new RegExp(`^${name}$`, 'i') }
-    });
-    
-    if (station) {
-      // Update existing station
-      station.data = data;
-      station.lastUpdated = Date.now();
-      await station.save();
-    } else {
-      // Create new station
-      station = await Station.create({
-        name: name.toLowerCase(),
-        data,
-        lastUpdated: Date.now()
+    const { name } = req.params;
+    const { vertexId, visible } = req.body;
+
+    if (!vertexId || typeof visible !== 'boolean') {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide vertexId and visibility status'
       });
     }
 
-    res.status(201).json({
+    // Find and update the station using atomic operation
+    const result = await Station.findOneAndUpdate(
+      {
+        name: { $regex: new RegExp(`^${name}$`, 'i') },
+        'data.mapData.vertices.id': vertexId
+      },
+      {
+        $set: {
+          'data.mapData.vertices.$.visible': visible,
+          lastUpdated: new Date()
+        }
+      },
+      {
+        new: true, // Return the updated document
+        runValidators: true // Run schema validators
+      }
+    );
+
+    if (!result) {
+      return res.status(404).json({
+        success: false,
+        message: 'Station or vertex not found'
+      });
+    }
+
+    // Find the updated vertex
+    const updatedVertex = result.data.mapData.vertices.find(v => v.id === vertexId);
+
+    res.json({
       success: true,
-      data: station
+      message: `Amenity visibility updated to ${visible}`,
+      vertex: updatedVertex
     });
+
   } catch (err) {
-    console.error('Creation error:', err);
-    res.status(400).json({
+    console.error('Update error:', err);
+    res.status(500).json({
       success: false,
-      message: 'Invalid data',
+      message: 'Server Error',
       error: err.message
     });
   }
